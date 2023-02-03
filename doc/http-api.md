@@ -15,7 +15,7 @@ Get server info, usually used for server health checks.
 }
 ```
 
-## *TODO* POST `/auth/register`
+## POST `/auth/register`
 
 Register a new user.
 
