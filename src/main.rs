@@ -4,13 +4,19 @@ async fn main() -> Result<(), tp::error::AppError> {
     dotenvy::dotenv().ok();
 
     // init database
-    tp::init_sqlite_db().await?;
+    let db_pool = tp::db::init::init_db().await?;
 
     // init tracing
     tracing_subscriber::fmt::init();
 
     // build app with route
-    let app = axum::Router::new().route("/", axum::routing::get(tp::controller::index::index));
+    let app = axum::Router::new()
+        .route("/", axum::routing::get(tp::controller::index::index))
+        .route(
+            "/auth/register",
+            axum::routing::post(tp::controller::auth::register),
+        )
+        .layer(axum::Extension(db_pool));
 
     // run app
     let port = std::env::var("PORT")

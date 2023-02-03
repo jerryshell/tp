@@ -1,7 +1,7 @@
 #[derive(Debug)]
 pub enum AppError {
     InvalidToken,
-    WrongCredential,
+    WrongEmailOrPassword,
     TokenCreationFailed,
     InternalServerError,
     EmailAlreadyExist,
@@ -16,7 +16,7 @@ impl axum::response::IntoResponse for AppError {
                 "invalid_token",
                 "invalid token",
             ),
-            AppError::WrongCredential => (
+            AppError::WrongEmailOrPassword => (
                 axum::http::StatusCode::UNAUTHORIZED,
                 "wrong_email_or_password",
                 "wrong email or password",
