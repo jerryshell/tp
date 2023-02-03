@@ -1,5 +1,11 @@
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), String> {
+    // init env variable
+    dotenvy::dotenv().ok();
+
+    // init database
+    tp::init_sqlite_db().await?;
+
     // init tracing
     tracing_subscriber::fmt::init();
 
@@ -13,4 +19,6 @@ async fn main() {
         .serve(app.into_make_service())
         .await
         .unwrap();
+
+    Ok(())
 }
