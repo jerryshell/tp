@@ -1,5 +1,5 @@
 #[tokio::main]
-async fn main() -> Result<(), String> {
+async fn main() -> Result<(), tp::error::AppError> {
     // init env variable
     dotenvy::dotenv().ok();
 
@@ -10,7 +10,7 @@ async fn main() -> Result<(), String> {
     tracing_subscriber::fmt::init();
 
     // build app with route
-    let app = axum::Router::new().route("/", axum::routing::get(|| async { "Hello, world" }));
+    let app = axum::Router::new().route("/", axum::routing::get(tp::controller::index::index));
 
     // run app
     let addr = std::net::SocketAddr::from(([0, 0, 0, 0], 3000));

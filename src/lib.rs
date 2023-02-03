@@ -1,11 +1,17 @@
-pub async fn init_sqlite_db() -> Result<sqlx::Pool<sqlx::sqlite::Sqlite>, String> {
+pub mod controller;
+pub mod error;
+
+pub async fn init_sqlite_db() -> Result<sqlx::Pool<sqlx::sqlite::Sqlite>, crate::error::AppError> {
     let database_url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
     let pool = match sqlx::sqlite::SqlitePoolOptions::new()
         .connect(&database_url)
         .await
     {
         Ok(conn) => conn,
-        Err(e) => return Err(e.to_string()),
+        Err(e) => {
+            tracing::error!("{}", e);
+            return Err(crate::error::AppError::DatabaseInitFailed);
+        }
     };
 
     // auth table
@@ -23,7 +29,8 @@ pub async fn init_sqlite_db() -> Result<sqlx::Pool<sqlx::sqlite::Sqlite>, String
     .execute(&pool)
     .await
     {
-        return Err(e.to_string());
+        tracing::error!("{}", e);
+        return Err(crate::error::AppError::DatabaseInitFailed);
     };
 
     // user table
@@ -38,7 +45,8 @@ pub async fn init_sqlite_db() -> Result<sqlx::Pool<sqlx::sqlite::Sqlite>, String
     .execute(&pool)
     .await
     {
-        return Err(e.to_string());
+        tracing::error!("{}", e);
+        return Err(crate::error::AppError::DatabaseInitFailed);
     };
 
     // link table
@@ -56,7 +64,8 @@ pub async fn init_sqlite_db() -> Result<sqlx::Pool<sqlx::sqlite::Sqlite>, String
     .execute(&pool)
     .await
     {
-        return Err(e.to_string());
+        tracing::error!("{}", e);
+        return Err(crate::error::AppError::DatabaseInitFailed);
     };
 
     Ok(pool)

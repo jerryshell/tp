@@ -2,7 +2,7 @@
 
 For a detailed description of the error code, please see the code: `src/error.rs`
 
-## *TODO* GET `/`
+## GET `/`
 
 Get server info, usually used for server health checks.
 
