@@ -95,7 +95,7 @@ Require `token` in request header.
 ```json
 {
     "code": "success",
-    "new_email": "your_new_email@email.com"
+    "email": "your_new_email@email.com"
 }
 ```
 
@@ -130,15 +130,6 @@ Require `token` in request header.
 }
 ```
 
-### Response (failed, status != 200)
-
-```json
-{
-    "code": "invalid_token",
-    "message": "invalid token"
-}
-```
-
 ## *TODO* GET `/user/profile`
 
 Get user profile.
@@ -150,17 +141,8 @@ Require `token` in request header.
 ```json
 {
     "id": "your_id",
-    "create_at": 10000,
-    "update_at": 10000
-}
-```
-
-### Response (failed, status != 200)
-
-```json
-{
-    "code": "invalid_token",
-    "message": "invalid token"
+    "createAt": 10000,
+    "updateAt": 10000
 }
 ```
 
@@ -178,21 +160,12 @@ Require `token` in request header.
     "data": [
         {
             "id": "link_id",
-            "create_at": 10000,
-            "update_at": 10000,
-            "user_id": "user_id",
-            "target_link": "https://examle.com"
+            "createAt": 10000,
+            "updateAt": 10000,
+            "userId": "userId",
+            "targetLink": "https://examle.com"
         }
     ]
-}
-```
-
-### Response (failed, status != 200)
-
-```json
-{
-    "code": "invalid_token",
-    "message": "invalid token"
 }
 ```
 
@@ -207,7 +180,7 @@ Require `token` in request header.
 ```json
 {
     "id": "link_id",
-    "target_link": "https://example.com"
+    "targetLink": "https://example.com"
 }
 ```
 
@@ -217,22 +190,13 @@ Require `token` in request header.
 {
     "code": "success",
     "id": "link_id",
-    "target_link": "https://example.com"
+    "targetLink": "https://example.com"
 }
 ```
 
-### Response (failed, status != 200)
+## *TODO* POST `/link/update/targetLink`
 
-```json
-{
-    "code": "invalid_token",
-    "message": "invalid token"
-}
-```
-
-## *TODO* POST `/link/update`
-
-Update link info.
+Update the target link of the specified id link.
 
 Require `token` in request header.
 
@@ -241,7 +205,7 @@ Require `token` in request header.
 ```json
 {
     "id": "link_id",
-    "target_link": "https://example.com"
+    "targetLink": "https://example.com"
 }
 ```
 
@@ -251,16 +215,7 @@ Require `token` in request header.
 {
     "code": "success",
     "id": "link_id",
-    "target_link": "https://example.com"
-}
-```
-
-### Response (failed, status != 200)
-
-```json
-{
-    "code": "invalid_token",
-    "message": "invalid token"
+    "targetLink": "https://example.com"
 }
 ```
 
@@ -284,26 +239,17 @@ Require `token` in request header.
 {
     "code": "success",
     "id": "link_id",
-    "target_link": "https://example.com"
-}
-```
-
-### Response (failed, status != 200)
-
-```json
-{
-    "code": "invalid_token",
-    "message": "invalid token"
+    "targetLink": "https://example.com"
 }
 ```
 
 ## *TODO* GET `/goto/:link_id`
 
-302 to target_link.
+302 to target link.
 
 ### Response (success, status == 302)
 
-302 to target_link.
+302 to target link.
 
 ### Response (failed, status != 302)
 
