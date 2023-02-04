@@ -28,6 +28,7 @@ async fn main() -> Result<(), tp::error::AppError> {
             "/link/create",
             axum::routing::post(tp::controller::link::create),
         )
+        .route("/link/list", axum::routing::get(tp::controller::link::list))
         .route(
             "/goto/:link_id",
             axum::routing::get(tp::controller::goto::goto),

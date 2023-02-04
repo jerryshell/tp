@@ -52,3 +52,19 @@ pub async fn update_visits_count(
         })?;
     Ok(())
 }
+
+pub async fn list_by_user_id(
+    db_pool: &sqlx::SqlitePool,
+    user_id: u32,
+) -> Result<Vec<crate::model::link::Link>, crate::error::AppError> {
+    sqlx::query_as::<_, crate::model::link::Link>(
+        "select id, create_at, update_at, remark, user_id, target_link, visits_count from link where user_id = $1;",
+    )
+    .bind(user_id)
+    .fetch_all(db_pool)
+    .await
+    .map_err(|error| {
+        tracing::error!("{}", error);
+        crate::error::AppError::InternalServerError
+    })
+}

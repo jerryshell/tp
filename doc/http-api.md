@@ -147,7 +147,7 @@ Require `token` in request header.
 }
 ```
 
-## *TODO* GET `/link/list`
+## GET `/link/list`
 
 Get link list.
 
@@ -164,7 +164,8 @@ Require `token` in request header.
             "createAt": 10000,
             "updateAt": 10000,
             "userId": "userId",
-            "targetLink": "https://examle.com"
+            "targetLink": "https://examle.com",
+            "visitsCount": 10
         }
     ]
 }

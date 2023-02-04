@@ -42,3 +42,19 @@ pub async fn create(
        "targetLink": link.target_link,
     })))
 }
+
+pub async fn list(
+    axum::Extension(db_pool): axum::Extension<sqlx::SqlitePool>,
+    header_map: axum::http::HeaderMap,
+) -> Result<axum::Json<serde_json::Value>, crate::error::AppError> {
+    // get clims from header map
+    let calims = crate::model::jwt::Calims::from_request_header_map(header_map)?;
+
+    // get link list by user_id
+    let link_list = crate::db::link::list_by_user_id(&db_pool, calims.user_id).await?;
+
+    Ok(axum::Json(serde_json::json!({
+       "code": "success",
+       "data": link_list,
+    })))
+}
