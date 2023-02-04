@@ -246,7 +246,7 @@ Require `token` in request header.
 }
 ```
 
-## *TODO* POST `/link/delete/:link_id`
+## POST `/link/delete/:link_id`
 
 Delete link.
 

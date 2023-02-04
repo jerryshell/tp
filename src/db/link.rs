@@ -104,3 +104,15 @@ pub async fn update_id(
         })?;
     Ok(())
 }
+
+pub async fn delete(db_pool: &sqlx::SqlitePool, id: &str) -> Result<(), crate::error::AppError> {
+    let _result = sqlx::query("delete from link where id=$1")
+        .bind(id)
+        .execute(db_pool)
+        .await
+        .map_err(|error| {
+            tracing::error!("{}", error);
+            crate::error::AppError::InternalServerError
+        })?;
+    Ok(())
+}

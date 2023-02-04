@@ -38,6 +38,10 @@ async fn main() -> Result<(), tp::error::AppError> {
             axum::routing::post(tp::controller::link::update_id),
         )
         .route(
+            "/link/delete/:link_id",
+            axum::routing::post(tp::controller::link::delete),
+        )
+        .route(
             "/goto/:link_id",
             axum::routing::get(tp::controller::goto::goto),
         )

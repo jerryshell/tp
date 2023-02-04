@@ -119,8 +119,8 @@ pub async fn update_id(
     // get link by id
     let link = crate::db::link::get_by_id(&db_pool, &form.id).await?;
 
-    // check if link is none
     match link {
+        // if link is none, send error
         None => Err(crate::error::AppError::FailedWithMessage(
             "link does not exist",
         )),
@@ -137,6 +137,40 @@ pub async fn update_id(
                "code": "success",
                "id": form.id,
                "newId": form.new_id,
+            })))
+        }
+    }
+}
+
+pub async fn delete(
+    axum::Extension(db_pool): axum::Extension<sqlx::SqlitePool>,
+    header_map: axum::http::HeaderMap,
+    axum::extract::Path(link_id): axum::extract::Path<String>,
+) -> Result<axum::Json<serde_json::Value>, crate::error::AppError> {
+    // get clims from header map
+    let calims = crate::model::jwt::Calims::from_request_header_map(header_map)?;
+
+    // get link by id
+    let link = crate::db::link::get_by_id(&db_pool, &link_id).await?;
+
+    match link {
+        // if link is none, send error
+        None => Err(crate::error::AppError::FailedWithMessage(
+            "link does not exist",
+        )),
+        Some(link) => {
+            // check link.user_id == calims.user_id
+            if link.user_id != calims.user_id {
+                return Err(crate::error::AppError::FailedWithMessage("no permissions"));
+            }
+
+            // delete link
+            crate::db::link::delete(&db_pool, &link_id).await?;
+
+            Ok(axum::Json(serde_json::json!({
+               "code": "success",
+               "id": link.id,
+               "targetLink": link.target_link,
             })))
         }
     }
