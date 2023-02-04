@@ -1,5 +1,6 @@
 #[derive(serde::Deserialize, serde::Serialize)]
 pub struct Calims {
+    pub user_id: u32,
     pub exp: u64,
 }
 

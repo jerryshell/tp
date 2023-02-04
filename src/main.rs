@@ -20,6 +20,10 @@ async fn main() -> Result<(), tp::error::AppError> {
             "/auth/login",
             axum::routing::post(tp::controller::auth::login),
         )
+        .route(
+            "/user/profile",
+            axum::routing::get(tp::controller::user::profile),
+        )
         .layer(axum::Extension(db_pool));
 
     // run app

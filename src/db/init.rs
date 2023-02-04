@@ -15,8 +15,8 @@ pub async fn init_db() -> Result<sqlx::SqlitePool, crate::error::AppError> {
     if let Err(e) = sqlx::query(
         "create table if not exists auth (
              id integer primary key autoincrement,
-             create_at integer not null,
-             update_at integer not null,
+             create_at timestamp not null,
+             update_at timestamp not null,
              remark text,
              user_id integer not null,
              email text not null,
@@ -34,8 +34,8 @@ pub async fn init_db() -> Result<sqlx::SqlitePool, crate::error::AppError> {
     if let Err(e) = sqlx::query(
         "create table if not exists user (
              id integer primary key autoincrement,
-             create_at integer not null,
-             update_at integer not null,
+             create_at timestamp not null,
+             update_at timestamp not null,
              remark text
          );",
     )
@@ -50,8 +50,8 @@ pub async fn init_db() -> Result<sqlx::SqlitePool, crate::error::AppError> {
     if let Err(e) = sqlx::query(
         "create table if not exists link (
              id text primary key,
-             create_at integer not null,
-             update_at integer not null,
+             create_at timestamp not null,
+             update_at timestamp not null,
              remark text,
              user_id integer not null,
              target_link text not null,

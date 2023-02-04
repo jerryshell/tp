@@ -63,7 +63,8 @@ User login and get token.
 ```json
 {
     "code": "success",
-    "token": "jwt_token"
+    "token": "jwt_token",
+    "userId": "user_id"
 }
 ```
 
@@ -130,7 +131,7 @@ Require `token` in request header.
 }
 ```
 
-## *TODO* GET `/user/profile`
+## GET `/user/profile`
 
 Get user profile.
 

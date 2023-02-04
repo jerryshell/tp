@@ -6,6 +6,7 @@ pub enum AppError {
     InternalServerError,
     EmailAlreadyExist,
     DatabaseInitFailed,
+    UserDoesNotExist,
 }
 
 impl axum::response::IntoResponse for AppError {
@@ -40,6 +41,11 @@ impl axum::response::IntoResponse for AppError {
                 axum::http::StatusCode::INTERNAL_SERVER_ERROR,
                 "database_init_failed",
                 "database init failed",
+            ),
+            AppError::UserDoesNotExist => (
+                axum::http::StatusCode::BAD_REQUEST,
+                "user_does_not_exist",
+                "user does not exist",
             ),
         };
         (

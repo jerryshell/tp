@@ -70,10 +70,11 @@ pub async fn login(
 
             match user {
                 // if user does not exist, send error
-                None => Err(crate::error::AppError::WrongEmailOrPassword),
+                None => Err(crate::error::AppError::UserDoesNotExist),
                 // create jwt
-                Some(_user) => {
+                Some(user) => {
                     let claims = crate::model::jwt::Calims {
+                        user_id: user.id,
                         exp: crate::utils::get_timestamp_n_hours_from_now(8),
                     };
                     let token = jsonwebtoken::encode(
@@ -84,7 +85,8 @@ pub async fn login(
                     .map_err(|_| crate::error::AppError::TokenCreationFailed)?;
                     Ok(axum::Json(serde_json::json!({
                         "code": "success",
-                        "token": token
+                        "token": token,
+                        "userId": user.id,
                     })))
                 }
             }
