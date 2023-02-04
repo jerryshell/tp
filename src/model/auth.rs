@@ -12,6 +12,20 @@ pub struct LoginForm {
     pub password: String,
 }
 
+#[derive(serde::Serialize, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct UpdateEmailForm {
+    pub id: u32,
+    pub email: String,
+}
+
+#[derive(serde::Serialize, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct UpdatePasswordForm {
+    pub id: u32,
+    pub password: String,
+}
+
 #[derive(serde::Serialize, serde::Deserialize, sqlx::FromRow)]
 #[serde(rename_all = "camelCase")]
 pub struct Auth {

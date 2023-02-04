@@ -1,14 +1,14 @@
 pub async fn register(
     axum::Extension(db_pool): axum::Extension<sqlx::SqlitePool>,
-    axum::Json(register_form): axum::Json<crate::model::auth::RegisterForm>,
+    axum::Json(form): axum::Json<crate::model::auth::RegisterForm>,
 ) -> Result<axum::Json<serde_json::Value>, crate::error::AppError> {
     // check if email or password is blank
-    if register_form.email.is_empty() || register_form.password.is_empty() {
+    if form.email.is_empty() || form.password.is_empty() {
         return Err(crate::error::AppError::WrongEmailOrPassword);
     }
 
     // get auth by email from database
-    let auth_by_email = crate::db::auth::get_by_email(&db_pool, &register_form.email).await?;
+    let auth_by_email = crate::db::auth::get_by_email(&db_pool, &form.email).await?;
 
     // if auth_by_email already exist, send error
     if auth_by_email.is_some() {
@@ -34,8 +34,8 @@ pub async fn register(
         update_at: now as u32,
         remark: "".to_string(),
         user_id: user_id as u32,
-        email: register_form.email,
-        password: register_form.password,
+        email: form.email,
+        password: form.password,
     };
 
     // insert auth into database
@@ -46,22 +46,22 @@ pub async fn register(
 
 pub async fn login(
     axum::Extension(db_pool): axum::Extension<sqlx::SqlitePool>,
-    axum::Json(login_form): axum::Json<crate::model::auth::LoginForm>,
+    axum::Json(form): axum::Json<crate::model::auth::LoginForm>,
 ) -> Result<axum::Json<serde_json::Value>, crate::error::AppError> {
     // check if email or password is blank
-    if login_form.email.is_empty() || login_form.password.is_empty() {
+    if form.email.is_empty() || form.password.is_empty() {
         return Err(crate::error::AppError::WrongEmailOrPassword);
     }
 
     // get auth by email from database
-    let auth_by_email = crate::db::auth::get_by_email(&db_pool, &login_form.email).await?;
+    let auth_by_email = crate::db::auth::get_by_email(&db_pool, &form.email).await?;
 
     match auth_by_email {
         // if auth_by_email does not exist, send error
         None => Err(crate::error::AppError::WrongEmailOrPassword),
         Some(auth_by_email) => {
             // check password
-            if auth_by_email.password != login_form.password {
+            if auth_by_email.password != form.password {
                 return Err(crate::error::AppError::WrongEmailOrPassword);
             }
 
@@ -90,6 +90,47 @@ pub async fn login(
                     })))
                 }
             }
+        }
+    }
+}
+
+pub async fn update_email(
+    axum::Extension(db_pool): axum::Extension<sqlx::SqlitePool>,
+    header_map: axum::http::HeaderMap,
+    axum::Json(form): axum::Json<crate::model::auth::UpdateEmailForm>,
+) -> Result<axum::Json<serde_json::Value>, crate::error::AppError> {
+    // get clims from header map
+    let calims = crate::model::jwt::Calims::from_request_header_map(header_map)?;
+
+    // check if email is blank
+    if form.email.is_empty() {
+        return Err(crate::error::AppError::FailedWithMessage("email is blank"));
+    }
+
+    // get auth by id
+    let auth = crate::db::auth::get_by_id(&db_pool, form.id).await?;
+
+    match auth {
+        // check if auth is none
+        None => Err(crate::error::AppError::FailedWithMessage(
+            "auth does not exist",
+        )),
+        Some(mut auth) => {
+            // check auth.user_id == calims.user_id
+            if auth.user_id != calims.user_id {
+                return Err(crate::error::AppError::FailedWithMessage("no permissions"));
+            }
+
+            // update email
+            let now = crate::utils::get_timestamp_n_hours_from_now(0);
+            auth.update_at = now as u32;
+            auth.email = form.email;
+            crate::db::auth::update_email(&db_pool, &auth).await?;
+
+            Ok(axum::Json(serde_json::json!({
+               "code": "success",
+               "email": auth.email,
+            })))
         }
     }
 }

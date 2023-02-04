@@ -77,7 +77,7 @@ User login and get token.
 }
 ```
 
-## *TODO* POST `/auth/update/email`
+## POST `/auth/update/email`
 
 Update auth email.
 
