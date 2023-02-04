@@ -5,6 +5,13 @@ pub struct RegisterForm {
     pub password: String,
 }
 
+#[derive(serde::Serialize, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct LoginForm {
+    pub email: String,
+    pub password: String,
+}
+
 #[derive(serde::Serialize, serde::Deserialize, sqlx::FromRow)]
 #[serde(rename_all = "camelCase")]
 pub struct Auth {

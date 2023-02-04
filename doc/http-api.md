@@ -45,7 +45,7 @@ Register a new user.
 }
 ```
 
-## *TODO* POST `/auth/login`
+## POST `/auth/login`
 
 User login and get token.
 
@@ -71,7 +71,7 @@ User login and get token.
 
 ```json
 {
-    "code": "login_failed",
+    "code": "wrong_email_or_password",
     "message": "wrong email or password"
 }
 ```
