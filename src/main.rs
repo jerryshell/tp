@@ -25,6 +25,10 @@ async fn main() -> Result<(), tp::error::AppError> {
             axum::routing::post(tp::controller::auth::update_email),
         )
         .route(
+            "/auth/update/password",
+            axum::routing::post(tp::controller::auth::update_password),
+        )
+        .route(
             "/user/profile",
             axum::routing::get(tp::controller::user::profile),
         )

@@ -109,7 +109,7 @@ Require `token` in request header.
 }
 ```
 
-## *TODO* POST `/auth/update/password`
+## POST `/auth/update/password`
 
 Update auth password.
 

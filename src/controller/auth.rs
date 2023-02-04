@@ -134,3 +134,46 @@ pub async fn update_email(
         }
     }
 }
+
+pub async fn update_password(
+    axum::Extension(db_pool): axum::Extension<sqlx::SqlitePool>,
+    header_map: axum::http::HeaderMap,
+    axum::Json(form): axum::Json<crate::model::auth::UpdatePasswordForm>,
+) -> Result<axum::Json<serde_json::Value>, crate::error::AppError> {
+    // get clims from header map
+    let calims = crate::model::jwt::Calims::from_request_header_map(header_map)?;
+
+    // check if password is blank
+    if form.password.is_empty() {
+        return Err(crate::error::AppError::FailedWithMessage(
+            "password is blank",
+        ));
+    }
+
+    // get auth by id
+    let auth = crate::db::auth::get_by_id(&db_pool, form.id).await?;
+
+    match auth {
+        // check if auth is none
+        None => Err(crate::error::AppError::FailedWithMessage(
+            "auth does not exist",
+        )),
+        Some(mut auth) => {
+            // check auth.user_id == calims.user_id
+            if auth.user_id != calims.user_id {
+                return Err(crate::error::AppError::FailedWithMessage("no permissions"));
+            }
+
+            // update password
+            let now = crate::utils::get_timestamp_n_hours_from_now(0);
+            auth.update_at = now as u32;
+            auth.password = form.password;
+            crate::db::auth::update_password(&db_pool, &auth).await?;
+
+            Ok(axum::Json(serde_json::json!({
+               "code": "success",
+               "password": auth.password,
+            })))
+        }
+    }
+}
