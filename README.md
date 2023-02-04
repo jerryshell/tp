@@ -1,8 +1,8 @@
-# tp
+# 📜 tp
 
 *tp* is a short link generation tool.
 
-> 📜 "tp" stands for "Town Portal Scroll" in DotA. 📜
+> "tp" stands for "Town Portal Scroll" in DotA.
 
 ## HTTP API
 
