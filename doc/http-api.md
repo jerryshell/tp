@@ -196,7 +196,7 @@ Require `token` in request header.
 }
 ```
 
-## *TODO* POST `/link/update/targetLink`
+## POST `/link/update/targetLink`
 
 Update the target link of the specified id link.
 

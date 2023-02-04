@@ -68,3 +68,39 @@ pub async fn list_by_user_id(
         crate::error::AppError::InternalServerError
     })
 }
+
+pub async fn update_target_link(
+    db_pool: &sqlx::SqlitePool,
+    link: &crate::model::link::Link,
+) -> Result<(), crate::error::AppError> {
+    let _result = sqlx::query("update link set update_at=$1, target_link=$2 where id=$3")
+        .bind(link.update_at)
+        .bind(&link.target_link)
+        .bind(&link.id)
+        .execute(db_pool)
+        .await
+        .map_err(|error| {
+            tracing::error!("{}", error);
+            crate::error::AppError::InternalServerError
+        })?;
+    Ok(())
+}
+
+pub async fn update_id(
+    db_pool: &sqlx::SqlitePool,
+    id: &str,
+    new_id: &str,
+) -> Result<(), crate::error::AppError> {
+    let now = crate::utils::get_timestamp_n_hours_from_now(0) as u32;
+    let _result = sqlx::query("update link set update_at=$1, id=$2 where id=$3")
+        .bind(now)
+        .bind(new_id)
+        .bind(id)
+        .execute(db_pool)
+        .await
+        .map_err(|error| {
+            tracing::error!("{}", error);
+            crate::error::AppError::InternalServerError
+        })?;
+    Ok(())
+}
