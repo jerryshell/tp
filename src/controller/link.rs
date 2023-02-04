@@ -100,3 +100,44 @@ pub async fn update_target_link(
         }
     }
 }
+
+pub async fn update_id(
+    axum::Extension(db_pool): axum::Extension<sqlx::SqlitePool>,
+    header_map: axum::http::HeaderMap,
+    axum::Json(form): axum::Json<crate::model::link::UpdateIdForm>,
+) -> Result<axum::Json<serde_json::Value>, crate::error::AppError> {
+    // get clims from header map
+    let calims = crate::model::jwt::Calims::from_request_header_map(header_map)?;
+
+    // check id or new_id is blank
+    if form.id.is_empty() || form.new_id.is_empty() {
+        return Err(crate::error::AppError::FailedWithMessage(
+            "id or new_id is blank",
+        ));
+    }
+
+    // get link by id
+    let link = crate::db::link::get_by_id(&db_pool, &form.id).await?;
+
+    // check if link is none
+    match link {
+        None => Err(crate::error::AppError::FailedWithMessage(
+            "link does not exist",
+        )),
+        Some(link) => {
+            // check link.user_id == calims.user_id
+            if link.user_id != calims.user_id {
+                return Err(crate::error::AppError::FailedWithMessage("no permissions"));
+            }
+
+            // update id
+            crate::db::link::update_id(&db_pool, &form.id, &form.new_id).await?;
+
+            Ok(axum::Json(serde_json::json!({
+               "code": "success",
+               "id": form.id,
+               "newId": form.new_id,
+            })))
+        }
+    }
+}

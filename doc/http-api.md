@@ -221,7 +221,7 @@ Require `token` in request header.
 }
 ```
 
-## *TODO* POST `/link/update/id`
+## POST `/link/update/id`
 
 Update link id.
 
@@ -246,19 +246,11 @@ Require `token` in request header.
 }
 ```
 
-## *TODO* POST `/link/delete`
+## *TODO* POST `/link/delete/:link_id`
 
 Delete link.
 
 Require `token` in request header.
-
-### Request
-
-```json
-{
-    "id": "link_id"
-}
-```
 
 ### Response (success, status == 200)
 
