@@ -28,6 +28,10 @@ async fn main() -> Result<(), tp::error::AppError> {
             "/link/create",
             axum::routing::post(tp::controller::link::create),
         )
+        .route(
+            "/goto/:link_id",
+            axum::routing::get(tp::controller::goto::goto),
+        )
         .layer(axum::Extension(db_pool));
 
     // run app

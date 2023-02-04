@@ -170,7 +170,7 @@ Require `token` in request header.
 }
 ```
 
-## *TODO* POST `/link/create`
+## POST `/link/create`
 
 Create a new link.
 
@@ -269,7 +269,7 @@ Require `token` in request header.
 }
 ```
 
-## *TODO* GET `/goto/:link_id`
+## GET `/goto/:link_id`
 
 302 to target link.
 

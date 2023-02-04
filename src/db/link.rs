@@ -35,3 +35,20 @@ pub async fn get_by_id(
         crate::error::AppError::InternalServerError
     })
 }
+
+pub async fn update_visits_count(
+    db_pool: &sqlx::SqlitePool,
+    link: &crate::model::link::Link,
+) -> Result<(), crate::error::AppError> {
+    let _result = sqlx::query("update link set update_at=$1, visits_count=$2 where id=$3")
+        .bind(link.update_at)
+        .bind(link.visits_count)
+        .bind(&link.id)
+        .execute(db_pool)
+        .await
+        .map_err(|error| {
+            tracing::error!("{}", error);
+            crate::error::AppError::InternalServerError
+        })?;
+    Ok(())
+}
