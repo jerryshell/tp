@@ -1,12 +1,46 @@
-# 📜 tp
+![townportal icon](images/townportal.gif)
 
-*tp* is a short link generation tool.
+*tp* is a serverless URL shortener based on [Cloudflare Workers](https://developers.cloudflare.com/workers).
 
 > "tp" stands for "Town Portal Scroll" in DotA.
 
-## HTTP API
+Bilibili Video: *TODO*
 
-See [http-api.md](doc/http-api.md)
+## Example
+
+```bash
+# 1. Create link
+curl -X POST -d '{ "url": "https://google.com" }' https://tp.jerryshell.workers.dev/create
+# 2. Get response /goto/mtMlXN6
+# 3. Open in browser https://tp.jerryshell.workers.dev/goto/mtMlXN6
+```
+
+## Wrangler cmd
+
+### Login
+
+```bash
+npx wrangler login
+```
+
+### Create KV namespace
+
+```bash
+wrangler kv:namespace create tp
+wrangler kv:namespace create tp --preview
+```
+
+### Dev
+
+```bash
+npx wrangler dev
+```
+
+### Publish
+
+```bash
+npx wrangler publish
+```
 
 ## LICENSE
 
