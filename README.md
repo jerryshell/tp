@@ -4,7 +4,7 @@
 
 > "tp" stands for "Town Portal Scroll" in DotA.
 
-Bilibili Video: *TODO*
+Bilibili Video: [https://www.bilibili.com/video/BV1jc411T7Cf](https://www.bilibili.com/video/BV1jc411T7Cf)
 
 ## Example
 
