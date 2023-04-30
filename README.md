@@ -11,8 +11,8 @@ Bilibili Video: *TODO*
 ```bash
 # 1. Create link
 curl -X POST -d '{ "url": "https://google.com" }' https://tp.jerryshell.workers.dev/create
-# 2. Get response /goto/mtMlXN6
-# 3. Open in browser https://tp.jerryshell.workers.dev/goto/mtMlXN6
+# 2. Get response /goto/cXB3HpG
+# 3. Open in browser https://tp.jerryshell.workers.dev/goto/cXB3HpG
 ```
 
 ## Wrangler cmd

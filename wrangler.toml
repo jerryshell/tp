@@ -3,7 +3,7 @@ main = "build/worker/shim.mjs"
 compatibility_date = "2022-01-20"
 
 kv_namespaces = [
-	{ binding = "tp", id = "0a21e28f488d4bd982c06954186e2094", preview_id = "7e227473fd3a4f0e84224da800b24d99" },
+	{ binding = "tp", id = "3b132b6bf45740c0bf32a90f69bbc548", preview_id = "8dd8c4057572466e95fab236667c25e8" },
 ]
 
 [vars]
